@@ -38,7 +38,8 @@ export function useStream() {
       const historyToSend = state.messages.filter(m => !m.isStreaming);
       const modelId = state.activeModelId;
 
-      const response = await fetch(`http://127.0.0.1:3001/v1/messages/${conversationId}/stream`, {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3001";
+      const response = await fetch(`${API_URL}/v1/messages/${conversationId}/stream`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: historyToSend, modelId, attachments }),
@@ -128,7 +129,8 @@ export function useStream() {
       const modelId = state.activeModelId;
       const historyToSend = useChatStore.getState().messages.filter(m => !m.isStreaming);
 
-      const response = await fetch(`http://127.0.0.1:3001/v1/messages/${conversationId}/stream`, {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3001";
+      const response = await fetch(`${API_URL}/v1/messages/${conversationId}/stream`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: historyToSend, modelId }),

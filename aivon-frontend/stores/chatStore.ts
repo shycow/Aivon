@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3001";
+
 export interface Message {
   id: string;
   role: "user" | "assistant" | "system";
@@ -96,7 +98,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   fetchConversations: async () => {
     try {
-      const res = await fetch("http://127.0.0.1:3001/v1/conversations");
+      const res = await fetch("${API_URL}/v1/conversations");
       const data = await res.json();
       set({ conversations: Array.isArray(data) ? data : [] });
     } catch (e) { 
@@ -107,7 +109,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   fetchFolders: async () => {
     try {
-      const res = await fetch("http://127.0.0.1:3001/v1/folders");
+      const res = await fetch("${API_URL}/v1/folders");
       const data = await res.json();
       set({ folders: Array.isArray(data) ? data : [] });
     } catch (e) {
@@ -117,7 +119,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   setActiveConversation: async (id: string) => {
     try {
-      const res = await fetch(`http://127.0.0.1:3001/v1/conversations/${id}`);
+      const res = await fetch(`${API_URL}/v1/conversations/${id}`);
       const data = await res.json();
       set({ 
         activeConversationId: id, 
@@ -128,7 +130,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   createNewConversation: async () => {
     try {
-      const res = await fetch("http://127.0.0.1:3001/v1/conversations", {
+      const res = await fetch("${API_URL}/v1/conversations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: "New Chat", model: get().activeModelId })
@@ -148,7 +150,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   deleteConversation: async (id: string) => {
     try {
-      await fetch(`http://127.0.0.1:3001/v1/conversations/${id}`, { method: "DELETE" });
+      await fetch(`${API_URL}/v1/conversations/${id}`, { method: "DELETE" });
       set((state) => {
         const remaining = state.conversations.filter(c => c.id !== id);
         return {
@@ -162,7 +164,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   renameConversation: async (id: string, title: string) => {
     try {
-      const res = await fetch(`http://127.0.0.1:3001/v1/conversations/${id}`, {
+      const res = await fetch(`${API_URL}/v1/conversations/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title })
@@ -176,7 +178,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   togglePin: async (id: string, isPinned: boolean) => {
     try {
-      const res = await fetch(`http://127.0.0.1:3001/v1/conversations/${id}`, {
+      const res = await fetch(`${API_URL}/v1/conversations/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isPinned })
@@ -190,7 +192,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   moveToFolder: async (id: string, folderId: string | null) => {
     try {
-      const res = await fetch(`http://127.0.0.1:3001/v1/conversations/${id}`, {
+      const res = await fetch(`${API_URL}/v1/conversations/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ folderId })
@@ -208,7 +210,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     if (!conversationId) return;
 
     try {
-      await fetch(`http://127.0.0.1:3001/v1/messages/${conversationId}/messages/${messageId}`, {
+      await fetch(`${API_URL}/v1/messages/${conversationId}/messages/${messageId}`, {
         method: "DELETE",
       });
       set((state) => ({
@@ -225,7 +227,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     if (!conversationId) return;
 
     try {
-      await fetch(`http://127.0.0.1:3001/v1/messages/${conversationId}/messages/${messageId}`, {
+      await fetch(`${API_URL}/v1/messages/${conversationId}/messages/${messageId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content }),
@@ -246,7 +248,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     if (!conversationId) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:3001/v1/messages/${conversationId}/messages/${messageId}/bookmark`, {
+      const res = await fetch(`${API_URL}/v1/messages/${conversationId}/messages/${messageId}/bookmark`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isBookmarked }),

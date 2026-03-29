@@ -5,6 +5,8 @@ import { X, Bookmark, Search, MessageSquare, Copy, Check, Trash2, ExternalLink }
 import { useAuthStore } from "@/stores/authStore";
 import { useChatStore } from "@/stores/chatStore";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3001";
+
 export function BookmarksModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { token } = useAuthStore();
   const { setActiveConversation, toggleBookmark } = useChatStore();
@@ -22,7 +24,7 @@ export function BookmarksModal({ isOpen, onClose }: { isOpen: boolean; onClose: 
   const fetchBookmarks = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:3001/v1/messages/bookmarks", {
+      const res = await fetch(`${API_URL}/v1/messages/bookmarks`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (res.ok) {

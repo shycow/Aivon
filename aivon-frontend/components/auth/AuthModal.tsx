@@ -4,6 +4,8 @@ import { useState } from "react";
 import { X, Mail, Lock, User, ArrowRight, Github, Chrome } from "lucide-react";
 import { useAuthStore } from "@/stores/authStore";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3001";
+
 export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
@@ -25,7 +27,7 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     const body = isLogin ? { email, password } : { email, password, name };
 
     try {
-      const res = await fetch(`http://127.0.0.1:3001/v1/auth${endpoint}`, {
+      const res = await fetch(`${API_URL}/v1/auth${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -140,14 +142,14 @@ export function AuthModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
 
           <div className="grid grid-cols-2 gap-3">
             <button 
-              onClick={() => window.location.href = "http://127.0.0.1:3001/v1/auth/google"}
+              onClick={() => window.location.href = "${API_URL}/v1/auth/google"}
               className="flex items-center justify-center gap-2 py-2.5 border border-border-subtle rounded-xl hover:bg-bg-tertiary transition-all text-xs font-semibold"
             >
               <Chrome className="w-4 h-4" />
               Google
             </button>
             <button 
-              onClick={() => window.location.href = "http://127.0.0.1:3001/v1/auth/github"}
+              onClick={() => window.location.href = "${API_URL}/v1/auth/github"}
               className="flex items-center justify-center gap-2 py-2.5 border border-border-subtle rounded-xl hover:bg-bg-tertiary transition-all text-xs font-semibold"
             >
               <Github className="w-4 h-4" />

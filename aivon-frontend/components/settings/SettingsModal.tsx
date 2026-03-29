@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { X, User, CreditCard, Key, Shield, LogOut, Upload, Check, Zap, Plus, Trash2 as TrashIcon, Copy, ArrowRight } from "lucide-react";
 import { useAuthStore } from "@/stores/authStore";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3001";
+
 export function SettingsModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { user, token, logout, setAuth } = useAuthStore();
   const [activeTab, setActiveTab] = useState("profile");
@@ -22,7 +24,7 @@ export function SettingsModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
     formData.append("file", file);
 
     try {
-      const res = await fetch("http://127.0.0.1:3001/v1/auth/avatar", {
+      const res = await fetch("${API_URL}/v1/auth/avatar", {
         method: "POST",
         headers: { "Authorization": `Bearer ${token}` },
         body: formData
@@ -46,7 +48,7 @@ export function SettingsModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
 
   const fetchUser = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:3001/v1/auth/me", {
+      const res = await fetch("${API_URL}/v1/auth/me", {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (res.ok) {
@@ -59,7 +61,7 @@ export function SettingsModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
   const fetchApiKeys = async () => {
     setIsLoadingKeys(true);
     try {
-      const res = await fetch("http://127.0.0.1:3001/v1/api-keys", {
+      const res = await fetch("${API_URL}/v1/api-keys", {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (res.ok) setApiKeys(await res.json());
@@ -70,7 +72,7 @@ export function SettingsModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
   const handleSaveProfile = async () => {
     setIsSaving(true);
     try {
-      const res = await fetch("http://127.0.0.1:3001/v1/auth/me", {
+      const res = await fetch("${API_URL}/v1/auth/me", {
         method: "PATCH",
         headers: { 
           "Content-Type": "application/json",
@@ -88,7 +90,7 @@ export function SettingsModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
 
   const handleCreateKey = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:3001/v1/api-keys", {
+      const res = await fetch("${API_URL}/v1/api-keys", {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -102,7 +104,7 @@ export function SettingsModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
 
   const handleDeleteKey = async (id: string) => {
     try {
-      const res = await fetch(`http://127.0.0.1:3001/v1/api-keys/${id}`, {
+      const res = await fetch(`${API_URL}/v1/api-keys/${id}`, {
         method: "DELETE",
         headers: { "Authorization": `Bearer ${token}` }
       });

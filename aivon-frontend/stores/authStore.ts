@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:3001";
+
 interface User {
   id: string;
   email: string;
@@ -36,7 +38,7 @@ export const useAuthStore = create<AuthState>()(
         if (!token) return;
 
         try {
-          const res = await fetch("http://127.0.0.1:3001/v1/auth/me", {
+          const res = await fetch(`${API_URL}/v1/auth/me`, {
             headers: {
               Authorization: `Bearer ${token}`
             }
