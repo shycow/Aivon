@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { X, User, CreditCard, Key, Shield, LogOut, Upload, Check, Zap, Plus, Trash2 as TrashIcon, Copy, ArrowRight } from "lucide-react";
 import { useAuthStore } from "@/stores/authStore";
 
@@ -13,7 +13,7 @@ export function SettingsModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
   const [isSaving, setIsSaving] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [apiKeys, setApiKeys] = useState<any[]>([]);
-  const fileInputRef = (require('react') as any).useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
