@@ -35,8 +35,10 @@ server.register(fastifyStatic, {
 });
 
 server.register(cors, {
-  origin: true, // Allow all origins for dev to fix "Failed to fetch"
+  origin: true,
   credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 });
 
 server.get("/v1/health", async (request, reply) => {
