@@ -3,6 +3,7 @@ import { db } from "../db";
 import { users } from "../db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 export default async function authRoutes(server: FastifyInstance) {
   server.post("/login", async (request, reply) => {
@@ -132,7 +133,8 @@ export default async function authRoutes(server: FastifyInstance) {
         stream.on('error', reject);
       });
 
-      const avatarUrl = `http://127.0.0.1:3001/uploads/avatars/${filename}`;
+      const APP_URL = process.env.APP_URL || "http://127.0.0.1:3001";
+      const avatarUrl = `${APP_URL}/uploads/avatars/${filename}`;
       
       await db.update(users)
         .set({ avatarUrl })
